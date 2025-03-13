@@ -1,0 +1,157 @@
+version 3
+run Sched1-0-20250313-18:09:36-20268
+attr configname Sched1
+attr datetime 20250313-18:09:36
+attr datetimef 20250313-180936
+attr experiment Sched1
+attr inifile omnetpp.ini
+attr iterationvars ""
+attr iterationvarsd ""
+attr iterationvarsf ""
+attr measurement ""
+attr network RadioSch2
+attr processid 20268
+attr repetition 0
+attr replication #0
+attr resultdir results
+attr runnumber 0
+attr seedset 0
+config description "low job arrival rate"
+config *.usersCount 8
+config *.scheduler.channels 15
+config **.user[*].generator.sendIaTime 0.2ms
+config **.user[*].generator.networkLoad 0.7
+config **.user[*].generator.packetsPerUser 10
+config **.user[*].generator.channels 15
+config **.user[*].generator.usersCount 8
+config **.user[*].generator.MAX_Sim 10s
+config **.user[*].generator.generatorPeriod 50ms
+config network RadioSch2
+config sim-time-limit 100h
+config cpu-time-limit 300s
+
+par RadioSch2.scheduler typename "\"cad.Scheduler\""
+par RadioSch2.scheduler schedulingPeriod 1ms
+attr unit ms
+par RadioSch2.scheduler usersCount 8
+par RadioSch2.scheduler channels 15
+par RadioSch2.sink typename "\"cad.Sink\""
+par RadioSch2.sink gateSize 8
+par RadioSch2.user[0].generator typename "\"cad.Source\""
+par RadioSch2.user[0].generator sendIaTime 0.2ms
+attr unit ms
+par RadioSch2.user[0].generator MAX_Sim 10000ms
+attr unit ms
+par RadioSch2.user[0].generator networkLoad 0.7
+par RadioSch2.user[0].generator packetsPerUser 10
+par RadioSch2.user[0].generator usersCount 8
+par RadioSch2.user[0].generator channels 15
+par RadioSch2.user[0].generator generatorPeriod 50ms
+attr unit ms
+par RadioSch2.user[0].myqq typename "\"cad.MyQ\""
+par RadioSch2.user[0] typename "\"cad.User\""
+par RadioSch2.user[0] radioLinkQuality 0.774407
+par RadioSch2.user[1].generator typename "\"cad.Source\""
+par RadioSch2.user[1].generator sendIaTime 0.2ms
+attr unit ms
+par RadioSch2.user[1].generator MAX_Sim 10000ms
+attr unit ms
+par RadioSch2.user[1].generator networkLoad 0.7
+par RadioSch2.user[1].generator packetsPerUser 10
+par RadioSch2.user[1].generator usersCount 8
+par RadioSch2.user[1].generator channels 15
+par RadioSch2.user[1].generator generatorPeriod 50ms
+attr unit ms
+par RadioSch2.user[1].myqq typename "\"cad.MyQ\""
+par RadioSch2.user[1] typename "\"cad.User\""
+par RadioSch2.user[1] radioLinkQuality 0.796422
+par RadioSch2.user[2].generator typename "\"cad.Source\""
+par RadioSch2.user[2].generator sendIaTime 0.2ms
+attr unit ms
+par RadioSch2.user[2].generator MAX_Sim 10000ms
+attr unit ms
+par RadioSch2.user[2].generator networkLoad 0.7
+par RadioSch2.user[2].generator packetsPerUser 10
+par RadioSch2.user[2].generator usersCount 8
+par RadioSch2.user[2].generator channels 15
+par RadioSch2.user[2].generator generatorPeriod 50ms
+attr unit ms
+par RadioSch2.user[2].myqq typename "\"cad.MyQ\""
+par RadioSch2.user[2] typename "\"cad.User\""
+par RadioSch2.user[2] radioLinkQuality 0.857595
+par RadioSch2.user[3].generator typename "\"cad.Source\""
+par RadioSch2.user[3].generator sendIaTime 0.2ms
+attr unit ms
+par RadioSch2.user[3].generator MAX_Sim 10000ms
+attr unit ms
+par RadioSch2.user[3].generator networkLoad 0.7
+par RadioSch2.user[3].generator packetsPerUser 10
+par RadioSch2.user[3].generator usersCount 8
+par RadioSch2.user[3].generator channels 15
+par RadioSch2.user[3].generator generatorPeriod 50ms
+attr unit ms
+par RadioSch2.user[3].myqq typename "\"cad.MyQ\""
+par RadioSch2.user[3] typename "\"cad.User\""
+par RadioSch2.user[3] radioLinkQuality 0.922133
+par RadioSch2.user[4].generator typename "\"cad.Source\""
+par RadioSch2.user[4].generator sendIaTime 0.2ms
+attr unit ms
+par RadioSch2.user[4].generator MAX_Sim 10000ms
+attr unit ms
+par RadioSch2.user[4].generator networkLoad 0.7
+par RadioSch2.user[4].generator packetsPerUser 10
+par RadioSch2.user[4].generator usersCount 8
+par RadioSch2.user[4].generator channels 15
+par RadioSch2.user[4].generator generatorPeriod 50ms
+attr unit ms
+par RadioSch2.user[4].myqq typename "\"cad.MyQ\""
+par RadioSch2.user[4] typename "\"cad.User\""
+par RadioSch2.user[4] radioLinkQuality 0.801382
+par RadioSch2.user[5].generator typename "\"cad.Source\""
+par RadioSch2.user[5].generator sendIaTime 0.2ms
+attr unit ms
+par RadioSch2.user[5].generator MAX_Sim 10000ms
+attr unit ms
+par RadioSch2.user[5].generator networkLoad 0.7
+par RadioSch2.user[5].generator packetsPerUser 10
+par RadioSch2.user[5].generator usersCount 8
+par RadioSch2.user[5].generator channels 15
+par RadioSch2.user[5].generator generatorPeriod 50ms
+attr unit ms
+par RadioSch2.user[5].myqq typename "\"cad.MyQ\""
+par RadioSch2.user[5] typename "\"cad.User\""
+par RadioSch2.user[5] radioLinkQuality 0.928973
+par RadioSch2.user[6].generator typename "\"cad.Source\""
+par RadioSch2.user[6].generator sendIaTime 0.2ms
+attr unit ms
+par RadioSch2.user[6].generator MAX_Sim 10000ms
+attr unit ms
+par RadioSch2.user[6].generator networkLoad 0.7
+par RadioSch2.user[6].generator packetsPerUser 10
+par RadioSch2.user[6].generator usersCount 8
+par RadioSch2.user[6].generator channels 15
+par RadioSch2.user[6].generator generatorPeriod 50ms
+attr unit ms
+par RadioSch2.user[6].myqq typename "\"cad.MyQ\""
+par RadioSch2.user[6] typename "\"cad.User\""
+par RadioSch2.user[6] radioLinkQuality 0.772442
+par RadioSch2.user[7].generator typename "\"cad.Source\""
+par RadioSch2.user[7].generator sendIaTime 0.2ms
+attr unit ms
+par RadioSch2.user[7].generator MAX_Sim 10000ms
+attr unit ms
+par RadioSch2.user[7].generator networkLoad 0.7
+par RadioSch2.user[7].generator packetsPerUser 10
+par RadioSch2.user[7].generator usersCount 8
+par RadioSch2.user[7].generator channels 15
+par RadioSch2.user[7].generator generatorPeriod 50ms
+attr unit ms
+par RadioSch2.user[7].myqq typename "\"cad.MyQ\""
+par RadioSch2.user[7] typename "\"cad.User\""
+par RadioSch2.user[7] radioLinkQuality 0.923626
+par RadioSch2.flc typename "\"cad.FLC\""
+par RadioSch2.flc config "<FLC>...</FLC> at C:/omnet/omnetpp-6.1/samples/cad/src/\\conf.xml:2"
+par RadioSch2.gen typename "\"cad.GeneratorFLC\""
+par RadioSch2 typename "\"cad.RadioSch2\""
+par RadioSch2 usersCount 8
+
