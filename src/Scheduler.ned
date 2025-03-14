@@ -30,4 +30,6 @@ simple Scheduler
     gates:
         output txScheduling[usersCount];
         input rxInfo[usersCount];
+        input inFLC;
+        output toFLC;
 }

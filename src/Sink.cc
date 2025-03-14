@@ -21,11 +21,13 @@ Define_Module(Sink);
 void Sink::initialize()
 {
     int numUsers = par("gateSize").intValue();
+    EV << "Number of users: " << numUsers << endl;
     for (int i = 0; i < numUsers; i++) {
         std::string signalName = "lifetime:user" + std::to_string(i);
         lifetimeSignals.push_back(registerSignal(signalName.c_str()));
         EV << "Registered signal: " << signalName << endl;
     }
+    meanHPdelay = 0;
 
 }
 

@@ -102,6 +102,9 @@ public:
     {
         return this->index;
     }
+    void setUserWeight(int newWeight) {
+        this->weight = newWeight;
+    }
 
     int getUserWeight()
         {

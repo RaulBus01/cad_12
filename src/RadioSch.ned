@@ -47,6 +47,9 @@ network RadioSch2
         }
     connections:
         gen.out --> flc.in;
+        scheduler.toFLC --> flc.fromScheduler;
+        flc.toScheduler-->scheduler.inFLC;
+        
         for i=0..usersCount - 1 {
             scheduler.txScheduling[i] --> user[i].rxScheduling;
             user[i].txPackets --> sink.rxPackets[i];

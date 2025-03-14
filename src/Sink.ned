@@ -44,5 +44,6 @@ simple Sink
      
     gates:
         input rxPackets[gateSize];
+        output toFLC;
 
 }
