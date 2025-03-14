@@ -1,8 +1,8 @@
 version 3
-run Sched1-0-20250313-18:09:36-20268
+run Sched1-0-20250314-11:16:01-16200
 attr configname Sched1
-attr datetime 20250313-18:09:36
-attr datetimef 20250313-180936
+attr datetime 20250314-11:16:01
+attr datetimef 20250314-111601
 attr experiment Sched1
 attr inifile omnetpp.ini
 attr iterationvars ""
@@ -10,7 +10,7 @@ attr iterationvarsd ""
 attr iterationvarsf ""
 attr measurement ""
 attr network RadioSch2
-attr processid 20268
+attr processid 16200
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -37,6 +37,94 @@ par RadioSch2.scheduler usersCount 8
 par RadioSch2.scheduler channels 15
 par RadioSch2.sink typename "\"cad.Sink\""
 par RadioSch2.sink gateSize 8
+statistic RadioSch2.sink userLifetime7:stats
+field count 10
+field mean 5
+field stddev 0
+field min 5
+field max 5
+field sum 50
+field sqrsum 250
+attr recordingmode stats
+attr source lifetime:user7
+attr title "Packet lifetime for user 7"
+statistic RadioSch2.sink userLifetime6:stats
+field count 20
+field mean 2.7511385143545
+field stddev 2.8435040405634
+field min 0.002277028709
+field max 6
+field sum 55.02277028709
+field sqrsum 305.0000518486
+attr recordingmode stats
+attr source lifetime:user6
+attr title "Packet lifetime for user 6"
+statistic RadioSch2.sink userLifetime5:stats
+field count 10
+field mean 3
+field stddev 1.0540925533895
+field min 2
+field max 4
+field sum 30
+field sqrsum 100
+attr recordingmode stats
+attr source lifetime:user5
+attr title "Packet lifetime for user 5"
+statistic RadioSch2.sink userLifetime4:stats
+field count 10
+field mean 3
+field stddev 0
+field min 3
+field max 3
+field sum 30
+field sqrsum 90
+attr recordingmode stats
+attr source lifetime:user4
+attr title "Packet lifetime for user 4"
+statistic RadioSch2.sink userLifetime3:stats
+field count 10
+field mean 4
+field stddev 0
+field min 4
+field max 4
+field sum 40
+field sqrsum 160
+attr recordingmode stats
+attr source lifetime:user3
+attr title "Packet lifetime for user 3"
+statistic RadioSch2.sink userLifetime2:stats
+field count 10
+field mean 2
+field stddev 0
+field min 2
+field max 2
+field sum 20
+field sqrsum 40
+attr recordingmode stats
+attr source lifetime:user2
+attr title "Packet lifetime for user 2"
+statistic RadioSch2.sink userLifetime1:stats
+field count 10
+field mean 1
+field stddev 0
+field min 1
+field max 1
+field sum 10
+field sqrsum 10
+attr recordingmode stats
+attr source lifetime:user1
+attr title "Packet lifetime for user 1"
+statistic RadioSch2.sink userLifetime0:stats
+field count 10
+field mean 2
+field stddev 1.0540925533895
+field min 1
+field max 3
+field sum 20
+field sqrsum 50
+attr recordingmode stats
+attr source lifetime:user0
+attr title "Packet lifetime for user 0"
 par RadioSch2.user[0].generator typename "\"cad.Source\""
 par RadioSch2.user[0].generator sendIaTime 0.2ms
 attr unit ms
@@ -50,7 +138,6 @@ par RadioSch2.user[0].generator generatorPeriod 50ms
 attr unit ms
 par RadioSch2.user[0].myqq typename "\"cad.MyQ\""
 par RadioSch2.user[0] typename "\"cad.User\""
-par RadioSch2.user[0] radioLinkQuality 0.774407
 par RadioSch2.user[1].generator typename "\"cad.Source\""
 par RadioSch2.user[1].generator sendIaTime 0.2ms
 attr unit ms
@@ -64,7 +151,6 @@ par RadioSch2.user[1].generator generatorPeriod 50ms
 attr unit ms
 par RadioSch2.user[1].myqq typename "\"cad.MyQ\""
 par RadioSch2.user[1] typename "\"cad.User\""
-par RadioSch2.user[1] radioLinkQuality 0.796422
 par RadioSch2.user[2].generator typename "\"cad.Source\""
 par RadioSch2.user[2].generator sendIaTime 0.2ms
 attr unit ms
@@ -78,7 +164,6 @@ par RadioSch2.user[2].generator generatorPeriod 50ms
 attr unit ms
 par RadioSch2.user[2].myqq typename "\"cad.MyQ\""
 par RadioSch2.user[2] typename "\"cad.User\""
-par RadioSch2.user[2] radioLinkQuality 0.857595
 par RadioSch2.user[3].generator typename "\"cad.Source\""
 par RadioSch2.user[3].generator sendIaTime 0.2ms
 attr unit ms
@@ -92,7 +177,6 @@ par RadioSch2.user[3].generator generatorPeriod 50ms
 attr unit ms
 par RadioSch2.user[3].myqq typename "\"cad.MyQ\""
 par RadioSch2.user[3] typename "\"cad.User\""
-par RadioSch2.user[3] radioLinkQuality 0.922133
 par RadioSch2.user[4].generator typename "\"cad.Source\""
 par RadioSch2.user[4].generator sendIaTime 0.2ms
 attr unit ms
@@ -106,7 +190,6 @@ par RadioSch2.user[4].generator generatorPeriod 50ms
 attr unit ms
 par RadioSch2.user[4].myqq typename "\"cad.MyQ\""
 par RadioSch2.user[4] typename "\"cad.User\""
-par RadioSch2.user[4] radioLinkQuality 0.801382
 par RadioSch2.user[5].generator typename "\"cad.Source\""
 par RadioSch2.user[5].generator sendIaTime 0.2ms
 attr unit ms
@@ -120,7 +203,6 @@ par RadioSch2.user[5].generator generatorPeriod 50ms
 attr unit ms
 par RadioSch2.user[5].myqq typename "\"cad.MyQ\""
 par RadioSch2.user[5] typename "\"cad.User\""
-par RadioSch2.user[5] radioLinkQuality 0.928973
 par RadioSch2.user[6].generator typename "\"cad.Source\""
 par RadioSch2.user[6].generator sendIaTime 0.2ms
 attr unit ms
@@ -134,7 +216,6 @@ par RadioSch2.user[6].generator generatorPeriod 50ms
 attr unit ms
 par RadioSch2.user[6].myqq typename "\"cad.MyQ\""
 par RadioSch2.user[6] typename "\"cad.User\""
-par RadioSch2.user[6] radioLinkQuality 0.772442
 par RadioSch2.user[7].generator typename "\"cad.Source\""
 par RadioSch2.user[7].generator sendIaTime 0.2ms
 attr unit ms
@@ -148,7 +229,6 @@ par RadioSch2.user[7].generator generatorPeriod 50ms
 attr unit ms
 par RadioSch2.user[7].myqq typename "\"cad.MyQ\""
 par RadioSch2.user[7] typename "\"cad.User\""
-par RadioSch2.user[7] radioLinkQuality 0.923626
 par RadioSch2.flc typename "\"cad.FLC\""
 par RadioSch2.flc config "<FLC>...</FLC> at C:/omnet/omnetpp-6.1/samples/cad/src/\\conf.xml:2"
 par RadioSch2.gen typename "\"cad.GeneratorFLC\""

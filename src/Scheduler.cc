@@ -52,21 +52,33 @@ void Scheduler::initialize()
 }
 
 void Scheduler::handleMessage(cMessage *msg) {
-    // Handle info messages
     for(int i = 0; i < NrUsers; i++) {
         if (msg->arrivedOn("rxInfo", i)) {
-            users[i].addQueueLength();
-            double currentTime = simTime().dbl();
-            double delay = currentTime - msg->getCreationTime().dbl();
-            users[i].updateDelayStats(delay);
-            if(msg->hasPar("radioLinkQuality")) {
-                double radioQuality = msg->par("radioLinkQuality").doubleValue();
-                users[i].setRadioLinkQuality(radioQuality);
-                EV << "Scheduler: User " << i << " has radio link quality " << radioQuality << endl;
+            // Update queue length
+            if (msg->hasPar("queueLengthInfo")) {
+                int queueLen = msg->par("queueLengthInfo").longValue();
+                users[i].setQueueLength(queueLen);
+                EV << "Scheduler: Updated queue length for user " << i 
+                   << " to " << queueLen << endl;
             }
             
-            EV << "Scheduler: Update queue length: user[" << i << "]= " 
-               << users[i].getQueueLength() << endl;
+            // Process channel qualities
+            if (msg->hasPar("channelQualities")) {
+                std::string qualitiesStr = msg->par("channelQualities").stringValue();
+                std::vector<double> qualities;
+                
+                cStringTokenizer tokenizer(qualitiesStr.c_str(), ",");
+                while (tokenizer.hasMoreTokens()) {
+                    double quality = atof(tokenizer.nextToken());
+                    qualities.push_back(quality);
+                }
+                
+                // Set the channel qualities
+                users[i].setChannelQualities(qualities);
+                
+              
+            }
+            EV << "Scheduler: Updated channel qualities for user " << i << " to: " << qualitiesStr << endl;
             delete msg;
             return;
         }
@@ -89,18 +101,47 @@ void Scheduler::handleMessage(cMessage *msg) {
                 return a.first > b.first;
             });
 
-        // Process and send in priority order
+        // Create channel allocation map
+        std::vector<int> channelAllocations(NrOfChannels, -1); // -1 means unallocated
+
+        // For each user in priority order
         for(const auto& [priority, userIndex] : priorityQueue) {
             if(remainingChannels <= 0) break;
-
+            
             int userQueueLength = std::max(0, users[userIndex].getQueueLength());
-            EV << "Priority: " << priority << " - User " << userIndex 
-               << " has " << userQueueLength << " blocks in queue" << endl;
+            if (userQueueLength <= 0) continue;
+            
+            // Find best channels for this user
+            std::vector<std::pair<double, int>> channelRanking; // (quality, channelIndex)
+            for (int c = 0; c < NrOfChannels; c++) {
+                if (channelAllocations[c] < 0) { // If channel is free
+                    double quality = users[userIndex].getChannelQuality(c);
+                    channelRanking.push_back({quality, c});
+                }
+            }
+            
+            // Sort by quality (highest first)
+            std::sort(channelRanking.begin(), channelRanking.end(),
+                [](const auto& a, const auto& b) {
+                    return a.first > b.first;
+                });
+            
+            // Allocate up to min(userQueueLength, remainingChannels) best channels
             int blocksToAllocate = std::min(userQueueLength, remainingChannels);
-            EV << "Priority: " << priority << " - Allocating " << blocksToAllocate 
-               << " blocks to user " << userIndex << "with link quality " << users[userIndex].getRadioLinkQuality() << endl;
-            if(blocksToAllocate > 0) {
-
+            blocksToAllocate = std::min(blocksToAllocate, (int)channelRanking.size());
+            
+            if (blocksToAllocate > 0) {
+                std::string assignedChannelStr;
+                for (int i = 0; i < blocksToAllocate; i++) {
+                    int channelIndex = channelRanking[i].second;
+                    channelAllocations[channelIndex] = userIndex;
+                    
+                    if (!assignedChannelStr.empty())
+                        assignedChannelStr += ",";
+                    assignedChannelStr += std::to_string(channelIndex);
+                }
+                
+                // Create and send command message
                 cMessage *cmd = new cMessage("cmd");
                 cmd->addPar("nrBlocks");
                 cmd->par("nrBlocks").setLongValue(blocksToAllocate);
@@ -114,16 +155,15 @@ void Scheduler::handleMessage(cMessage *msg) {
                 cmd->addPar("userIndex");
                 cmd->par("userIndex").setLongValue(userIndex);
 
-                cmd->addPar("radioLinkQuality");
-                cmd->par("radioLinkQuality").setDoubleValue(users[userIndex].getRadioLinkQuality());
 
 
-                EV << "Scheduler: Sending " << blocksToAllocate << " blocks to user " << userIndex << endl;
-
+                cmd->addPar("assignedChannels");
+                cmd->par("assignedChannels").setStringValue(assignedChannelStr.c_str());
+                
                 users[userIndex].updateLastTimeServed(currentSimTime);
                 users[userIndex].decrementQueueLength(blocksToAllocate);
                 remainingChannels -= blocksToAllocate;
-
+                
                 send(cmd, "txScheduling", userIndex);
             }
         }

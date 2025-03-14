@@ -20,42 +20,47 @@ Define_Module(Sink);
 
 void Sink::initialize()
 {
-
-    csvFile.open("delays.csv");
-    csvFile << "Time,UserIndex,RadioLinkQuality,Weight,Priority,Delay\n"; // Header
+    int numUsers = par("gateSize").intValue();
+    for (int i = 0; i < numUsers; i++) {
+        std::string signalName = "lifetime:user" + std::to_string(i);
+        lifetimeSignals.push_back(registerSignal(signalName.c_str()));
+        EV << "Registered signal: " << signalName << endl;
+    }
 
 }
-void Sink::writeToCSV(int userIndex, double radioLinkQuality,int weight, int priority, simtime_t delay) {
-    csvFile << simTime() << "," << userIndex << "," <<radioLinkQuality << ","<< weight << "," << priority << "," << delay << "\n";
-           
-}
+
 
 void Sink::handleMessage(cMessage *msg)
 {
     simtime_t lifetime = simTime() - msg->getCreationTime();
   
-     if(msg->arrivedOn("rxPackets"))
-     {
-   
-        int userPriority = (int)msg->par("userPriorityType");
-        int userWeight = (int)msg->par("Weight");
-        int userIndex = (int)msg->par("userIndex");
-        double radioLinkQuality = msg->par("radioLinkQuality").doubleValue();
-
-        writeToCSV(userIndex, radioLinkQuality, userWeight, userPriority, lifetime);
-      
-     }
+    if(msg->arrivedOn("rxPackets"))
+    {
+        // Extract message parameters
+        int userPriority = msg->par("userPriorityType").longValue();
+        int userWeight = msg->par("Weight").longValue();
+        int userIndex = msg->par("userIndex").longValue();
+        
+        // Get channel quality if available
+        double channelQuality = 1.0;
+        if (msg->hasPar("channelQuality")) {
+            channelQuality = msg->par("channelQuality").doubleValue();
+        }
+        
+        // Emit the signal for this user's packet lifetime
+        if (userIndex >= 0 && userIndex < (int)lifetimeSignals.size()) {
+            emit(lifetimeSignals[userIndex], lifetime);
+            EV << "Emitted lifetime signal for user " << userIndex 
+               << ", priority " << userPriority 
+               << ", weight " << userWeight 
+               << ", delay " << lifetime << "s" << endl;
+        }
+    }
      
     
       delete msg;
 }
 void Sink::finish()
 {
-    
-    csvFile.close();
 
-
-    
-  
-   
 }

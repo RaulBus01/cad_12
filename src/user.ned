@@ -20,8 +20,6 @@ module User
 {
     parameters:
         @display("i=block/user");
-       double radioLinkQuality = default(uniform(0.5, 1));	
-    	
 
     @display("bgb=90,160");
 

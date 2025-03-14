@@ -27,14 +27,11 @@ using namespace omnetpp;
 class Sink : public cSimpleModule
 {
 private:
-
-  std::ofstream csvFile;
-  void writeToCSV(int userIndex, double radioLinkQuality,int weight, int priority, simtime_t delay);
+  std::vector<simsignal_t> lifetimeSignals;
   protected:
     virtual void initialize() override;
     virtual void handleMessage(cMessage *msg) override;
     virtual void finish() override;
-    void recordDelay(simtime_t delay, int priority);
     
 };
 
