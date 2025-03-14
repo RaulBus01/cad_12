@@ -568,11 +568,7 @@ void FLC::handleMessage(cMessage *msg)
 	    int wantedDelay = 10;//(int)getParentModule()->par("delayLimit");
 	    int currentDelay = round((double)getParentModule()->getSubmodule("sink")->par("meanHPDelay"));
 	    int W_HP = (int)getParentModule()->getSubmodule("scheduler")->par("W_HP");
-<<<<<<< HEAD
-	    int B = 20;//(int)getParentModule()->getSubmodule("netwrk")->par("B");
-=======
 	    int B = 31;//(int)getParentModule()->getSubmodule("netwrk")->par("B");
->>>>>>> 3558353 (enhance Scheduler and Sink modules with user weight management, update delay tracking, and improve signal handling)
 
 	    int new_W_HP = W_HP;
 		int diff = wantedDelay - currentDelay;

@@ -29,7 +29,6 @@ void Sink::initialize()
         lifetimeSignals.push_back(registerSignal(signalName.c_str()));
         EV << "Registered signal: " << signalName << endl;
     }
-<<<<<<< HEAD
     
     // Initialize delay tracking values
     meanHPDelay = 0.0;
@@ -76,60 +75,6 @@ void Sink::handleMessage(cMessage *msg) {
     }
 }
 
-=======
-    
-    // Initialize delay tracking values
-    meanHPDelay = 0.0;
-    par("meanHPDelay").setDoubleValue(0.0);  // Create and initialize this parameter
-    lastUpdateTime = simTime();
-    updateInterval = 0.1;  // 100ms in seconds
-}
-
-void Sink::handleMessage(cMessage *msg)
-{
-    simtime_t lifetime = simTime() - msg->getCreationTime();
-    double alpha = 0.7; // EWMA factor
-  
-    if(msg->arrivedOn("rxPackets"))
-    {
-        // Extract message parameters
-        int userWeight = msg->par("Weight").longValue();
-        int userIndex = msg->par("userIndex").longValue();
-        
-        // Track HP user delays (weight >= 4 indicates HP)
-        if (userWeight >= 4) {
-            double ms = lifetime.dbl() * 1000;  // Convert to milliseconds
-            
-            // Use EWMA for smoother delay calculation
-            if (meanHPDelay == 0.0) {
-                meanHPDelay = ms;
-            } else {
-                meanHPDelay = alpha * meanHPDelay + (1-alpha) * ms;
-            }
-            
-            // Update parameter periodically
-            if (simTime() - lastUpdateTime >= updateInterval) {
-                lastUpdateTime = simTime();
-                
-                // Update the parameter directly - FLC will read this
-                par("meanHPDelay").setDoubleValue(meanHPDelay);
-                EV << "Updated meanHPDelay parameter to " << meanHPDelay << "ms" << endl;
-            }
-        }
-        
-        // Emit the signal for this user's packet lifetime
-        if (userIndex >= 0 && userIndex < (int)lifetimeSignals.size()) {
-            emit(lifetimeSignals[userIndex], lifetime);
-            EV << "Emitted lifetime signal for user " << userIndex 
-               << ", weight " << userWeight 
-               << ", delay " << lifetime << "s" << endl;
-        }
-    }
-    
-    delete msg;
-}
-
->>>>>>> 3558353 (enhance Scheduler and Sink modules with user weight management, update delay tracking, and improve signal handling)
 void Sink::finish()
 {
     // Empty implementation
