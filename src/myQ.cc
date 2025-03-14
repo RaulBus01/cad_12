@@ -22,11 +22,19 @@ void MyQ::initialize()
     queue.setName("queue");
     int channelCount = getParentModule()->getParentModule()->getSubmodule("scheduler")->par("channels");
     channelQualities.resize(channelCount);
+    int userIndex = getParentModule()->getIndex();
+    double baseQuality = 0.5 + 0.5 * (userIndex % 3) / 3.0; // Base quality depends on user class
+    
     for (int i = 0; i < channelCount; i++) {
-        int userIndex = getParentModule()->getIndex();
-        double baseQuality = 0.5 + 0.5 * (userIndex % 3) / 3.0; // Different user classes have different base qualities
-        channelQualities[i] = baseQuality;
-        EV<<"User "<<userIndex<<" has base quality "<<baseQuality<<endl;
+        // Create deterministic variation based on both channel index and user index
+        // This ensures different channels have different qualities
+        // The sine function creates a smooth variation between channels
+        double channelVariation = 0.3 * sin((i * (userIndex + 1)) / 5.0);
+        
+        // Ensure quality stays in reasonable range [0.2, 1.0]
+        channelQualities[i] = std::max(0.2, std::min(1.0, baseQuality + channelVariation));
+        
+        EV << "User " << userIndex << " channel " << i << " has quality " << channelQualities[i] << endl;
     }
   
 }

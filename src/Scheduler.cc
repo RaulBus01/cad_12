@@ -76,9 +76,9 @@ void Scheduler::handleMessage(cMessage *msg) {
                 // Set the channel qualities
                 users[i].setChannelQualities(qualities);
                 
+                EV << "Scheduler: Updated channel qualities for user " << i << " to: " << qualitiesStr << endl;
               
             }
-            EV << "Scheduler: Updated channel qualities for user " << i << " to: " << qualitiesStr << endl;
             delete msg;
             return;
         }

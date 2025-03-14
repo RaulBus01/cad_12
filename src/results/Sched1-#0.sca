@@ -1,8 +1,8 @@
 version 3
-run Sched1-0-20250314-11:16:01-16200
+run Sched1-0-20250314-14:32:15-11128
 attr configname Sched1
-attr datetime 20250314-11:16:01
-attr datetimef 20250314-111601
+attr datetime 20250314-14:32:15
+attr datetimef 20250314-143215
 attr experiment Sched1
 attr inifile omnetpp.ini
 attr iterationvars ""
@@ -10,7 +10,7 @@ attr iterationvarsd ""
 attr iterationvarsf ""
 attr measurement ""
 attr network RadioSch2
-attr processid 16200
+attr processid 11128
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -38,90 +38,90 @@ par RadioSch2.scheduler channels 15
 par RadioSch2.sink typename "\"cad.Sink\""
 par RadioSch2.sink gateSize 8
 statistic RadioSch2.sink userLifetime7:stats
-field count 10
-field mean 5
-field stddev 0
-field min 5
-field max 5
-field sum 50
-field sqrsum 250
+field count 13240
+field mean 1.7734167480967
+field stddev 2.2843165814693
+field min 0.000276368355
+field max 20.499301658513
+field sum 23480.037744801
+field sqrsum 110722.34779586
 attr recordingmode stats
 attr source lifetime:user7
 attr title "Packet lifetime for user 7"
 statistic RadioSch2.sink userLifetime6:stats
-field count 20
-field mean 2.7511385143545
-field stddev 2.8435040405634
-field min 0.002277028709
-field max 6
-field sum 55.02277028709
-field sqrsum 305.0000518486
+field count 13070
+field mean 1.9215934366987
+field stddev 2.4997596287917
+field min 0.001569486573
+field max 20.962285659481
+field sum 25115.226217652
+field sqrsum 129926.79755954
 attr recordingmode stats
 attr source lifetime:user6
 attr title "Packet lifetime for user 6"
 statistic RadioSch2.sink userLifetime5:stats
-field count 10
-field mean 3
-field stddev 1.0540925533895
-field min 2
-field max 4
-field sum 30
-field sqrsum 100
+field count 12660
+field mean 1.0631832929775
+field stddev 1.1379518178297
+field min 0.000484631389
+field max 9.259859445921
+field sum 13459.900489095
+field sqrsum 30702.915131434
 attr recordingmode stats
 attr source lifetime:user5
 attr title "Packet lifetime for user 5"
 statistic RadioSch2.sink userLifetime4:stats
-field count 10
-field mean 3
-field stddev 0
-field min 3
-field max 3
-field sum 30
-field sqrsum 90
+field count 13320
+field mean 1.2577728888346
+field stddev 1.4631389337611
+field min 0.002312086946
+field max 12.315204927151
+field sum 16753.534879277
+field sqrsum 49585.131373735
 attr recordingmode stats
 attr source lifetime:user4
 attr title "Packet lifetime for user 4"
 statistic RadioSch2.sink userLifetime3:stats
-field count 10
-field mean 4
-field stddev 0
-field min 4
-field max 4
-field sum 40
-field sqrsum 160
+field count 12900
+field mean 1.494167041596
+field stddev 1.8340305784047
+field min 0.000142268908
+field max 15.970453237408
+field sum 19274.754836588
+field sqrsum 72187.659040063
 attr recordingmode stats
 attr source lifetime:user3
 attr title "Packet lifetime for user 3"
 statistic RadioSch2.sink userLifetime2:stats
-field count 10
-field mean 2
-field stddev 0
-field min 2
-field max 2
-field sum 20
-field sqrsum 40
+field count 13040
+field mean 0.93829327595299
+field stddev 0.98220635897387
+field min 0.001202054064
+field max 8.071572553583
+field sum 12235.344318427
+field sqrsum 24059.447057795
 attr recordingmode stats
 attr source lifetime:user2
 attr title "Packet lifetime for user 2"
 statistic RadioSch2.sink userLifetime1:stats
-field count 10
-field mean 1
-field stddev 0
-field min 1
-field max 1
-field sum 10
-field sqrsum 10
+field count 13030
+field mean 0.78012118579725
+field stddev 0.70235665361851
+field min 0.000203705435
+field max 5.042196778446
+field sum 10164.979050938
+field sqrsum 14357.184647488
 attr recordingmode stats
 attr source lifetime:user1
 attr title "Packet lifetime for user 1"
 statistic RadioSch2.sink userLifetime0:stats
-field count 10
-field mean 2
-field stddev 1.0540925533895
-field min 1
-field max 3
-field sum 20
-field sqrsum 50
+field count 13220
+field mean 0.81154957026491
+field stddev 0.77399159610248
+field min 0.001865727618
+field max 7.463585863424
+field sum 10728.685318902
+field sqrsum 16625.87363594
 attr recordingmode stats
 attr source lifetime:user0
 attr title "Packet lifetime for user 0"
