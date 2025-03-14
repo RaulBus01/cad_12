@@ -21,6 +21,7 @@ simple Sink
 {
  parameters:
         int gateSize;
+        double meanHPDelay = default(0.0) @mutable; 
         @display("i=block/sink");
         //individual signals for each user 
         @signal[lifetime:user0](type="simtime_t");
@@ -44,6 +45,5 @@ simple Sink
      
     gates:
         input rxPackets[gateSize];
-        output toFLC;
 
 }

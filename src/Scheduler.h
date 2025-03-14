@@ -28,27 +28,11 @@ public:
     User(int index, int weight)
     {
         this->index = index;
-        this->weight = assignUserWeight(index);
+        this->weight = weight;
         this->lastTimeServed = 0;
         this->queueLength = 0;
     }
 
-    int assignUserWeight(int index)
-    {
-       if (index == 0)
-            return 4; // High Priority
-        else if (index == 1)
-            return 5; // High Priority
-        else if (index >= 2 && index <= 5) {
-            //Medium Priority
-            return 2;
-        }
-        else if (index >= 6 && index <= 7)
-            return 1; // Low Priority
-        else
-            return 1; // Default Low Priority
-       
-    }
 
     int addQueueLength()
     {

@@ -45,13 +45,48 @@ void Scheduler::initialize()
     selfMsg = new cMessage("selfMsg");
     for(int user = 0; user < NrUsers; ++user)
     {
-        users.push_back((User(user, user+1)));
+<<<<<<< HEAD
+        if (user < 3) {
+            users.push_back((User(user, par("W_LP").intValue())));
+        } else if (user < 6) {
+            users.push_back((User(user, par("W_MP").intValue())));
+        } else {
+            users.push_back((User(user, par("W_HP").intValue())));
+=======
+        if (user < 2) {
+            users.push_back((User(user, par("W_HP").intValue())));
+        } else if (user < 5) {
+            users.push_back((User(user, par("W_MP").intValue())));
+        } else {
+            users.push_back((User(user, par("W_LP").intValue())));
+>>>>>>> 3558353 (enhance Scheduler and Sink modules with user weight management, update delay tracking, and improve signal handling)
+        }
     }
 
     scheduleAt(simTime(), selfMsg);
 }
 
 void Scheduler::handleMessage(cMessage *msg) {
+    // Handle weight updates from FLC
+    if (msg->arrivedOn("inFLC")) {
+        if (msg->hasPar("newHPWeight")) {
+            int newWeight = msg->par("newHPWeight").longValue();
+            EV << "Scheduler received new HP weight: " << newWeight << endl;
+            
+<<<<<<< HEAD
+            // Update HP user weights
+            for (int i = 6; i < NrUsers; i++) {
+=======
+            // Update HP users (assume users 0 and 1 are high priority)
+            for (int i = 0; i < std::min(2, (int)users.size()); i++) {
+>>>>>>> 3558353 (enhance Scheduler and Sink modules with user weight management, update delay tracking, and improve signal handling)
+                users[i].setUserWeight(newWeight);
+            }
+        }
+        delete msg;
+        return;
+    }
+    
     for(int i = 0; i < NrUsers; i++) {
         if (msg->arrivedOn("rxInfo", i)) {
             // Update queue length
@@ -85,7 +120,7 @@ void Scheduler::handleMessage(cMessage *msg) {
     }
 
      if (msg == selfMsg) {
-        double currentSimTime = simTime().dbl();
+        double currentSimTime = simTime().dbl();// Convert to milliseconds
         int remainingChannels = NrOfChannels;
 
         // Create priority-ordered vector of users

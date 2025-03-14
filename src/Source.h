@@ -27,7 +27,7 @@ class Source : public cSimpleModule
 {
 private:
     cMessage *sendMessageEvent;
-
+    double sendingInterval;  
   public:
     Source();
     virtual ~Source();

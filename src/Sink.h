@@ -13,26 +13,27 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef __SCHED_TST_SINK_H_
-#define __SCHED_TST_SINK_H_
+#ifndef __CAD_SINK_H
+#define __CAD_SINK_H
 
 #include <omnetpp.h>
-#include <fstream>
-
 using namespace omnetpp;
 
-/**
- * TODO - Generated class
- */
 class Sink : public cSimpleModule
 {
-private:
-  std::vector<simsignal_t> lifetimeSignals;
+  private:
+    // Signal declarations
+    std::vector<simsignal_t> lifetimeSignals;
+    
+    // HP delay tracking variables
+    double meanHPDelay;
+    simtime_t lastUpdateTime;
+    simtime_t updateInterval;
+
   protected:
     virtual void initialize() override;
     virtual void handleMessage(cMessage *msg) override;
     virtual void finish() override;
-    
 };
 
 #endif

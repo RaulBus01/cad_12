@@ -30,32 +30,47 @@ Source::~Source()
 void Source::initialize()
 {
     sendMessageEvent = new cMessage("sendMessageEvent");
-    scheduleAt(simTime(), sendMessageEvent);
-}
-
-void Source::handleMessage(cMessage *msg)
-{
-
+    
+    // Calculate sending time once during initialization
     int nrUsers = par("usersCount").intValue();
     int nrPackets = par("packetsPerUser").intValue();
     int PacketLength = 1;
     double schedulingCycle = 1.0;
     double netwload = par("networkLoad").doubleValue();
     int nrChannels = par("channels").intValue();
-    for(int i=0;i<nrPackets;i++){
-        ASSERT(msg == sendMessageEvent);
+    
+    // Output debug information only once
+    EV << "Users: " << nrUsers << " Packets: " << nrPackets 
+       << " Packet Length: " << PacketLength 
+       << " Scheduling Cycle: " << schedulingCycle 
+       << " Network Load: " << netwload 
+       << " Channels: " << nrChannels << endl;
+    
+    double sendingTime = (nrUsers * nrPackets * PacketLength * schedulingCycle) / (netwload * nrChannels);
+    
+    // Output the calculated sending time for debugging
+    EV << "Calculated Sending Time: " << sendingTime << " ms" << endl;
+    
+    // Store sending time as a class member or parameter for use in handleMessage
+    sendingInterval = sendingTime;
+    
+    scheduleAt(simTime(), sendMessageEvent);
+}
+
+void Source::handleMessage(cMessage *msg)
+{
+    ASSERT(msg == sendMessageEvent);
+    
+    int nrPackets = par("packetsPerUser").intValue();
+    for(int i = 0; i < nrPackets; i++) {
         cMessage* job = new cMessage("job");
         send(job, "txPackets");
     }
-     if(simTime() >= par("MAX_Sim").doubleValue()){
+    
+    if(simTime() >= par("MAX_Sim").doubleValue()) {
         endSimulation();
     }
     
-    EV << "Users: " << nrUsers << " Packets: " << nrPackets << " Packet Length: " << PacketLength << " Scheduling Cycle: " << schedulingCycle << " Network Load: " << netwload << " Channels: " << nrChannels << endl;
-    double sendingTime = (nrUsers * nrPackets * PacketLength * schedulingCycle) / (netwload * nrChannels);
-
-    // Output the calculated sending time for debugging
-    EV << "Calculated Sending Time: " << sendingTime << " ms" << endl;
-
-    scheduleAt(simTime() + exponential(sendingTime), sendMessageEvent);
+    // Use the pre-calculated sending time
+    scheduleAt(simTime() + exponential(sendingInterval), sendMessageEvent);
 }

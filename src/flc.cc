@@ -296,10 +296,10 @@ Define_Module(FLC);
 
 void FLC::initialize()
 {
-    qtime.setName("delay vector");
-    qtimew.setName("weight vector");
-    result_dep.setName("result nescalat");
-    res_dep.setName("res scalat");
+    qtime.setName("Delay vector");
+    qtimew.setName("Weight vector");
+    result_dep.setName("Result dep");
+    res_dep.setName("Result scaled");
 
    cXMLElement *rootelement = par("config").xmlValue();
    EV <<"initialize FLC\n";
@@ -565,10 +565,14 @@ void FLC::handleMessage(cMessage *msg)
 	{
 
 	    ev << "Calculez nou HP" << endl;
-	    int wantedDelay = 800;//(int)getParentModule()->par("delayLimit");
-	    int currentDelay = round((double)getParentModule()->getSubmodule("sink")->par("meanDelayHP"));
-	    int W_HP = (int)getParentModule()->getSubmodule("scheduler")->par("weight");
+	    int wantedDelay = 10;//(int)getParentModule()->par("delayLimit");
+	    int currentDelay = round((double)getParentModule()->getSubmodule("sink")->par("meanHPDelay"));
+	    int W_HP = (int)getParentModule()->getSubmodule("scheduler")->par("W_HP");
+<<<<<<< HEAD
+	    int B = 20;//(int)getParentModule()->getSubmodule("netwrk")->par("B");
+=======
 	    int B = 31;//(int)getParentModule()->getSubmodule("netwrk")->par("B");
+>>>>>>> 3558353 (enhance Scheduler and Sink modules with user weight management, update delay tracking, and improve signal handling)
 
 	    int new_W_HP = W_HP;
 		int diff = wantedDelay - currentDelay;
@@ -587,11 +591,12 @@ void FLC::handleMessage(cMessage *msg)
 		result_dep.record (result);
 
 		int res = round(scale((B * -1)/2, B/2, 0, 62, result));
-		ev<<" Result = "<<result<<"\nRes= "<<res<<"\n";
+		ev<<" Result raw = "<<result<<"\nResult scaled= "<<res<<"\n";
 
 		res_dep.record (res);
 
 		new_W_HP = new_W_HP + res;
+		ev << "New Weight For HP User" << new_W_HP << "\n\n";
 
 		if (new_W_HP>B) new_W_HP = B-1;
 		if (new_W_HP<1) new_W_HP = 1;
@@ -600,7 +605,7 @@ void FLC::handleMessage(cMessage *msg)
 		cPar& W_HP_r = getParentModule()->getSubmodule("hp_fifo")->par("weight");
 		W_HP_r.setIntValue(new_W_HP);
 */
-		ev<<"New Weight For HP User"<<new_W_HP<<"\n\n";
+		ev<<"New Weight For HP User "<<new_W_HP<<"\n\n";
 		
 		qtimew.record(new_W_HP);
 		//cMessage *job = new cMessage("clear");
