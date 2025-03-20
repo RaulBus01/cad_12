@@ -27,9 +27,7 @@ class MyQ : public cSimpleModule
 {
 
   protected:
-     //cMessage *msgServiced;
-    // cMessage *endServiceMsg;
-    std::vector<double> channelQualities; // channel qualities for each user
+   
      cQueue queue;
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);

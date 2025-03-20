@@ -68,20 +68,9 @@ public:
             return this->weight;
         }
    
-        return this->weight * (currentSimTime - this->lastTimeServed) * getAverageChannelQuality();
+        return this->weight * (currentSimTime - this->lastTimeServed);
     }
-
-    // Add method to calculate average channel quality
-    double getAverageChannelQuality() const {
-        if (channelQualities.empty()) return 1.0; // Default if no qualities set
-        
-        double sum = 0.0;
-        for (const auto& quality : channelQualities) {
-            sum += quality;
-        }
-        return sum / channelQualities.size();
-    }
-
+    
     int getUserIndex()
     {
         return this->index;
@@ -107,23 +96,13 @@ public:
         return packetCount;
     }
  
-    std::vector<double> channelQualities; // Store per-channel quality values
 
-    void setChannelQualities(const std::vector<double>& qualities) {
-        this->channelQualities = qualities;
-    }
 
-    // Update to only use channel qualities, remove radioLinkQuality fallback
-    double getChannelQuality(int channelIndex) const {
-        if (channelIndex >= 0 && channelIndex < (int)channelQualities.size())
-            return channelQualities[channelIndex];
-        return 1.0; // Default quality if channel index is invalid
-    }
 
-    // Get a metric for overall radio link quality (for display/statistics)
-    double getRadioLinkQuality() const {
-        return getAverageChannelQuality();
-    }
+
+
+
+
 private:
     User();
     int index;

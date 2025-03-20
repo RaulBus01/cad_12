@@ -565,14 +565,12 @@ void FLC::handleMessage(cMessage *msg)
 	{
 
 	    ev << "Calculez nou HP" << endl;
-	    double wantedDelay = 2;//(int)getParentModule()->par("delayLimit"); // in seconds
-	    double currentDelay = round((double)getParentModule()->getSubmodule("sink")->par("meanHPDelay"));
+	    double wantedDelay = 1;//(int)getParentModule()->par("delayLimit"); // in seconds
+	    double currentDelay = getParentModule()->getSubmodule("sink")->par("meanHPDelay").doubleValue();
 	    int W_HP = (int)getParentModule()->getSubmodule("scheduler")->par("W_HP");
-	    int B = 15;//(int)getParentModule()->getSubmodule("netwrk")->par("B");
-
+	    int B =20;//(int)getParentModule()->getSubmodule("netwrk")->par("B");
+        int maxWeight = -1;
 	    int new_W_HP = W_HP;
-		EV << "Current Weight For HP User " << W_HP << "\n";
-		EV << "Current Delay For HP User  " << currentDelay << "\n";
 		int diff = wantedDelay - currentDelay;
 
 		qtime.record (currentDelay);
@@ -581,6 +579,7 @@ void FLC::handleMessage(cMessage *msg)
 		diff = scale(0, 62, -10, 10, diff);
 		W_HP = scale(0, 62, 0, B, W_HP);
 		ev<<" Dif scalat = "<<diff<<"\n";
+		ev<<" W_HP scalat = "<<W_HP<<"\n";
 			
 		int delta = 4;//(int) getParentModule()->par("delta");
 		int inp[2]={diff,W_HP};
@@ -594,8 +593,10 @@ void FLC::handleMessage(cMessage *msg)
 		res_dep.record (res);
 
 		new_W_HP = new_W_HP + res;
-		ev << "New Weight For HP User" << new_W_HP << "\n\n";
+	    if(new_W_HP > maxWeight) maxWeight = new_W_HP;
 
+		ev << "New Weight For HP User" << new_W_HP << "\n\n";
+   
 		if (new_W_HP>B) new_W_HP = B-1;
 		if (new_W_HP<1) new_W_HP = 1;
 
@@ -610,10 +611,12 @@ void FLC::handleMessage(cMessage *msg)
 		sendDirect(weightUpdate, getParentModule()->getSubmodule("scheduler")->gate("inFLC"));
 
 		qtimew.record(new_W_HP);
+
 		ev << "Target Delay: " << wantedDelay 
    << " | Current Delay: " << currentDelay 
    << " | Diff: " << wantedDelay - currentDelay
    << " | Old Weight: " << W_HP 
+   << " | Max Weight: " << maxWeight
    << " | New Weight: " << new_W_HP << endl;
 		//cMessage *job = new cMessage("clear");
 		//sendDirect(job, getParentModule()->getSubmodule("netwrk")->gate("in"));

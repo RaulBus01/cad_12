@@ -20,29 +20,11 @@ Define_Module(MyQ);
 void MyQ::initialize()
 {
     queue.setName("queue");
-    int channelCount = getParentModule()->getParentModule()->getSubmodule("scheduler")->par("channels");
-    channelQualities.resize(channelCount);
-    int userIndex = getParentModule()->getIndex();
-    double baseQuality = 0.5 + 0.5 * (userIndex % 3) / 3.0; // Base quality depends on user class
-    
-    for (int i = 0; i < channelCount; i++) {
-        // Create deterministic variation based on both channel index and user index
-        // This ensures different channels have different qualities
-        // The sine function creates a smooth variation between channels
-        double channelVariation = 0.3 * sin((i * (userIndex + 1)) / 5.0);
-        
-        // Ensure quality stays in reasonable range [0.2, 1.0]
-        channelQualities[i] = std::max(0.2, std::min(1.0, baseQuality + channelVariation));
-        
-        EV << "User " << userIndex << " channel " << i << " has quality " << channelQualities[i] << endl;
-    }
-  
 }
 
 void MyQ::handleMessage(cMessage *msg)
 {
     int queueLength;
-
 
     if (msg->arrivedOn("rxPackets")) {
         queue.insert(msg);
@@ -52,7 +34,8 @@ void MyQ::handleMessage(cMessage *msg)
         int userPriorityType = (int)msg->par("userPriorityType");
         int userWeight = (int)msg->par("Weight");
         int userIndex = (int)msg->par("userIndex");
-        // Get assigned channel indices if provided
+ 
+
         std::vector<int> assignedChannels;
         if (msg->hasPar("assignedChannels")) {
             const char* channelStr = msg->par("assignedChannels").stringValue();
@@ -80,18 +63,9 @@ void MyQ::handleMessage(cMessage *msg)
             par->setLongValue(userWeight);
             msg->addPar(par);
             
-            // Add channel quality for the assigned channel
-            if (!assignedChannels.empty()) {
-                int channelIdx = assignedChannels[nrOfRadioBlocks % assignedChannels.size()];
-                double quality = channelQualities[channelIdx];
-                
-                cMsgPar *par = new cMsgPar("channelQuality");
-                par->setDoubleValue(quality);
-                msg->addPar(par);
-            }
+       
 
             send(msg, "txPackets");
-            
             nrOfRadioBlocks--;
         }
     }
@@ -102,14 +76,15 @@ void MyQ::handleMessage(cMessage *msg)
     qInfo->addPar("queueLengthInfo");
     qInfo->par("queueLengthInfo").setLongValue(queueLength);
 
-    std::string channelQualitiesStr;
-    for (size_t i = 0; i < channelQualities.size(); i++) {
-        if (!channelQualitiesStr.empty())
-            channelQualitiesStr += ",";
-        channelQualitiesStr += std::to_string(channelQualities[i]);
-    }
-    qInfo->addPar("channelQualities");
-    qInfo->par("channelQualities").setStringValue(channelQualitiesStr.c_str());
+    // Remove channel qualities from queue info message
+    // std::string channelQualitiesStr;
+    // for (size_t i = 0; i < channelQualities.size(); i++) {
+    //     if (!channelQualitiesStr.empty())
+    //         channelQualitiesStr += ",";
+    //     channelQualitiesStr += std::to_string(channelQualities[i]);
+    // }
+    // qInfo->addPar("channelQualities");
+    // qInfo->par("channelQualities").setStringValue(channelQualitiesStr.c_str());
 
     // Send queue length info
     send(qInfo, "txInfo");

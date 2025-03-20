@@ -82,24 +82,7 @@ void Scheduler::handleMessage(cMessage *msg) {
                 EV << "Scheduler: Updated queue length for user " << i 
                    << " to " << queueLen << endl;
             }
-            
-            // Process channel qualities
-            if (msg->hasPar("channelQualities")) {
-                std::string qualitiesStr = msg->par("channelQualities").stringValue();
-                std::vector<double> qualities;
-                
-                cStringTokenizer tokenizer(qualitiesStr.c_str(), ",");
-                while (tokenizer.hasMoreTokens()) {
-                    double quality = atof(tokenizer.nextToken());
-                    qualities.push_back(quality);
-                }
-                
-                // Set the channel qualities
-                users[i].setChannelQualities(qualities);
-                
-                EV << "Scheduler: Updated channel qualities for user " << i << " to: " << qualitiesStr << endl;
-              
-            }
+        
             delete msg;
             return;
         }
@@ -132,34 +115,22 @@ void Scheduler::handleMessage(cMessage *msg) {
             int userQueueLength = std::max(0, users[userIndex].getQueueLength());
             if (userQueueLength <= 0) continue;
             
-            // Find best channels for this user
-            std::vector<std::pair<double, int>> channelRanking; // (quality, channelIndex)
-            for (int c = 0; c < NrOfChannels; c++) {
-                if (channelAllocations[c] < 0) { // If channel is free
-                    double quality = users[userIndex].getChannelQuality(c);
-                    channelRanking.push_back({quality, c});
-                }
-            }
-            
-            // Sort by quality (highest first)
-            std::sort(channelRanking.begin(), channelRanking.end(),
-                [](const auto& a, const auto& b) {
-                    return a.first > b.first;
-                });
-            
-            // Allocate up to min(userQueueLength, remainingChannels) best channels
+
             int blocksToAllocate = std::min(userQueueLength, remainingChannels);
-            blocksToAllocate = std::min(blocksToAllocate, (int)channelRanking.size());
-            
             if (blocksToAllocate > 0) {
                 std::string assignedChannelStr;
-                for (int i = 0; i < blocksToAllocate; i++) {
-                    int channelIndex = channelRanking[i].second;
-                    channelAllocations[channelIndex] = userIndex;
-                    
-                    if (!assignedChannelStr.empty())
-                        assignedChannelStr += ",";
-                    assignedChannelStr += std::to_string(channelIndex);
+                int channelsAssigned = 0;
+                
+                // Simple sequential channel allocation
+                for (int c = 0; c < NrOfChannels && channelsAssigned < blocksToAllocate; c++) {
+                    if (channelAllocations[c] < 0) { // If channel is free
+                        channelAllocations[c] = userIndex;
+                        
+                        if (!assignedChannelStr.empty())
+                            assignedChannelStr += ",";
+                        assignedChannelStr += std::to_string(c);
+                        channelsAssigned++;
+                    }
                 }
                 
                 // Create and send command message

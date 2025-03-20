@@ -72,15 +72,14 @@ void Sink::handleMessage(cMessage *msg) {
             if (meanHPDelay == 0) {
                 meanHPDelay = currentHPDelay;
             } else {
-                meanHPDelay = (1-alpha) * meanHPDelay + alpha * currentHPDelay;
+                meanHPDelay = alpha * meanHPDelay + (1 - alpha) * currentHPDelay;
             }
           
-            
+            EV << "Current HP delay: " << currentHPDelay 
+               << "s, Max HP delay: " << maxHPDelay << "s" << endl;
             // Update parameter for FLC to access
             par("meanHPDelay").setDoubleValue(meanHPDelay);
             
-            EV << "HP packet delay: " << currentHPDelay 
-               << "s, Average: " << meanHPDelay << "s" << endl;
         }
         
         // Delete the message

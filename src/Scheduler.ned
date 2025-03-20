@@ -24,9 +24,9 @@ simple Scheduler
         //volatile 
         
         double schedulingPeriod @unit(ms) = default(1 ms);
-        int W_HP = default(10) @mutable;
-        int W_MP = default(6);
-        int W_LP = default(2);
+        int W_HP = default(4) @mutable;
+        int W_MP = default(2);
+        int W_LP = default(1);
         int usersCount;
         int channels;
  
