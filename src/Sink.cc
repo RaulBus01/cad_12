@@ -29,18 +29,23 @@ void Sink::initialize()
         lifetimeSignals.push_back(registerSignal(signalName.c_str()));
         EV << "Registered signal: " << signalName << endl;
     }
-    
+    user6WeightSignal = registerSignal("user6Weight");
+    user7WeightSignal = registerSignal("user7Weight");
     // Initialize delay tracking values
     meanHPDelay = 0.0;
+    maxHPDelay = 0.0; 
+    sumHPDelay = 0.0;
+    numHPPackets = 0;
     par("meanHPDelay").setDoubleValue(0.0);  // Create and initialize this parameter
-    lastUpdateTime = simTime();
-    updateInterval = 0.1;  // 100ms in seconds
+
+
 }
 
 // In Sink.cc - Update handleMessage() to track HP delays properly
 void Sink::handleMessage(cMessage *msg) {
     // Calculate packet lifetime (end-to-end delay)
-    simtime_t lifetime = simTime() - msg->getCreationTime();
+    simtime_t lifetime = simTime() - msg->getCreationTime(); // Lifetime in seconds
+
     
     if (msg->arrivedOn("rxPackets")) {
         // Get user index and check if it's a high priority user
@@ -51,11 +56,19 @@ void Sink::handleMessage(cMessage *msg) {
         emit(lifetimeSignals[userIndex], lifetime);
         
         // Track high priority user delays (users with weight >= 4)
-        if (userWeight >= 4) {
+        if (userIndex == 6 || userIndex == 7) {
             // Update running average with exponential moving average
-            double alpha = 0.1;  // Smoothing factor
+            if (userIndex == 6) {
+                emit(user6WeightSignal, userWeight);
+            } else if (userIndex == 7) {
+                emit(user7WeightSignal, userWeight);
+            }
+            double alpha = 0.5;  // Smoothing factor
             double currentHPDelay = lifetime.dbl();
-            
+            maxHPDelay = std::max(maxHPDelay, currentHPDelay);
+          
+            sumHPDelay = sumHPDelay + currentHPDelay; 
+            numHPPackets++;
             if (meanHPDelay == 0) {
                 meanHPDelay = currentHPDelay;
             } else {
@@ -67,7 +80,7 @@ void Sink::handleMessage(cMessage *msg) {
             par("meanHPDelay").setDoubleValue(meanHPDelay);
             
             EV << "HP packet delay: " << currentHPDelay 
-               << "ms, Average: " << meanHPDelay << "ms" << endl;
+               << "s, Average: " << meanHPDelay << "s" << endl;
         }
         
         // Delete the message
@@ -77,5 +90,10 @@ void Sink::handleMessage(cMessage *msg) {
 
 void Sink::finish()
 {
-    // Empty implementation
+    EV << "Simulation finished" << endl;
+    EV << "Mean HP delay: " << meanHPDelay << "s" << endl;
+    EV << "Max HP delay: " << maxHPDelay << "s" << endl;
+    EV << "Total HP packets: " << numHPPackets << endl;
+    EV << "Total HP delay: " << sumHPDelay/numHPPackets << "s" << endl;
+
 }

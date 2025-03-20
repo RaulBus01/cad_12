@@ -565,12 +565,14 @@ void FLC::handleMessage(cMessage *msg)
 	{
 
 	    ev << "Calculez nou HP" << endl;
-	    int wantedDelay = 10;//(int)getParentModule()->par("delayLimit");
-	    int currentDelay = round((double)getParentModule()->getSubmodule("sink")->par("meanHPDelay"));
+	    double wantedDelay = 2;//(int)getParentModule()->par("delayLimit"); // in seconds
+	    double currentDelay = round((double)getParentModule()->getSubmodule("sink")->par("meanHPDelay"));
 	    int W_HP = (int)getParentModule()->getSubmodule("scheduler")->par("W_HP");
-	    int B = 31;//(int)getParentModule()->getSubmodule("netwrk")->par("B");
+	    int B = 15;//(int)getParentModule()->getSubmodule("netwrk")->par("B");
 
 	    int new_W_HP = W_HP;
+		EV << "Current Weight For HP User " << W_HP << "\n";
+		EV << "Current Delay For HP User  " << currentDelay << "\n";
 		int diff = wantedDelay - currentDelay;
 
 		qtime.record (currentDelay);
@@ -598,12 +600,21 @@ void FLC::handleMessage(cMessage *msg)
 		if (new_W_HP<1) new_W_HP = 1;
 
 /* not for test
-		cPar& W_HP_r = getParentModule()->getSubmodule("hp_fifo")->par("weight");
+
+*/		cPar& W_HP_r = getParentModule()->getSubmodule("scheduler")->par("W_HP");
 		W_HP_r.setIntValue(new_W_HP);
-*/
 		ev<<"New Weight For HP User "<<new_W_HP<<"\n\n";
-		
+		cMessage *weightUpdate = new cMessage("weightUpdate");
+		weightUpdate->addPar("newHPWeight");
+		weightUpdate->par("newHPWeight").setLongValue(new_W_HP);
+		sendDirect(weightUpdate, getParentModule()->getSubmodule("scheduler")->gate("inFLC"));
+
 		qtimew.record(new_W_HP);
+		ev << "Target Delay: " << wantedDelay 
+   << " | Current Delay: " << currentDelay 
+   << " | Diff: " << wantedDelay - currentDelay
+   << " | Old Weight: " << W_HP 
+   << " | New Weight: " << new_W_HP << endl;
 		//cMessage *job = new cMessage("clear");
 		//sendDirect(job, getParentModule()->getSubmodule("netwrk")->gate("in"));
 		delete msg;

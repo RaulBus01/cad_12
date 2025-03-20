@@ -62,7 +62,7 @@ void MyQ::handleMessage(cMessage *msg)
             }
         }
         
-        EV << "MyQ received " << nrOfRadioBlocks << " blocks to user " << userIndex << endl;
+        EV << "MyQ received " << nrOfRadioBlocks << " blocks from user " << userIndex << endl;
         delete msg;
 
         // Empty the queue

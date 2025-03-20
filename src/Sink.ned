@@ -22,6 +22,8 @@ simple Sink
  parameters:
         int gateSize;
         double meanHPDelay = default(0.0) @mutable; 
+        double hpDelaySum = 0.0;
+        int hpPacketCount = 0;
         @display("i=block/sink");
         //individual signals for each user 
         @signal[lifetime:user0](type="simtime_t");
@@ -32,7 +34,11 @@ simple Sink
         @signal[lifetime:user5](type="simtime_t");
         @signal[lifetime:user6](type="simtime_t");
         @signal[lifetime:user7](type="simtime_t");
+
+        @signal[user6Weight](type="int");
+        @signal[user7Weight](type="int");
         
+
  
         @statistic[userLifetime0](source="lifetime:user0"; record=vector,stats; title="Packet lifetime for user 0");
         @statistic[userLifetime1](source="lifetime:user1"; record=vector,stats; title="Packet lifetime for user 1");
@@ -42,7 +48,11 @@ simple Sink
         @statistic[userLifetime5](source="lifetime:user5"; record=vector,stats; title="Packet lifetime for user 5");
         @statistic[userLifetime6](source="lifetime:user6"; record=vector,stats; title="Packet lifetime for user 6");
         @statistic[userLifetime7](source="lifetime:user7"; record=vector,stats; title="Packet lifetime for user 7");
-     
+
+        @statistic[user6Weight](source="user6Weight"; record=vector,stats; title="Weight for user 6");
+        @statistic[user7Weight](source="user7Weight"; record=vector,stats; title="Weight for user 7");
+
+
     gates:
         input rxPackets[gateSize];
 

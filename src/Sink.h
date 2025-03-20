@@ -24,11 +24,14 @@ class Sink : public cSimpleModule
   private:
     // Signal declarations
     std::vector<simsignal_t> lifetimeSignals;
-    
+    simsignal_t user6WeightSignal;
+    simsignal_t user7WeightSignal;
+    simsignal_t userHPDelaySignal;
     // HP delay tracking variables
     double meanHPDelay;
-    simtime_t lastUpdateTime;
-    simtime_t updateInterval;
+    double sumHPDelay;
+    double maxHPDelay;
+    int numHPPackets;
 
   protected:
     virtual void initialize() override;

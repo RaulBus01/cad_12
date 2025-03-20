@@ -6,7 +6,7 @@ simple FLC
 	gates:
 		input in;
 		input  fromScheduler;
-        output toScheduler;
+   
 }
  
  network FLC_Net

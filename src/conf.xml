@@ -14,7 +14,7 @@
 		<value>21</value>
 	</n_rules>
 	<delta>
-		<value>0</value>
+		<value>4</value>
 	</delta>
 
 	<!--Fuzzy set for the first input-->
@@ -168,7 +168,7 @@
 	<rule>
 		<p1>NS</p1>
 		<p2>H</p2>
-		<c>PS</c>
+		<c>ZR</c> <!-- Change to expand "do nothing" zome -->
 	</rule>
 	<rule>
 		<p1>ZR</p1>
@@ -178,19 +178,19 @@
 	<rule>
 		<p1>PS</p1>
 		<p2>H</p2>
-		<c>NS</c>
+		<c>NM</c> <!--Change this to NM for drastic change-->
 	</rule>
 
 	<rule>
 		<p1>PM</p1>
 		<p2>H</p2>
-		<c>NS</c>
+		<c>NL</c> <!--Change this to NL for drastic change-->
 	</rule>
 
 	<rule>
 		<p1>PL</p1>
 		<p2>H</p2>
-		<c>NM</c>
+		<c>NL</c> <!--Change this to NL for drastic change-->
 	</rule>
 	<rule>
 		<p1>NL</p1>
@@ -217,7 +217,7 @@
 	<rule>
 		<p1>PS</p1>
 		<p2>M</p2>
-		<c>NS</c>
+		<c>NS</c> 
 	</rule>
 
 	<rule>

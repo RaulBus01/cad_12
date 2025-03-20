@@ -106,7 +106,7 @@ void Scheduler::handleMessage(cMessage *msg) {
     }
 
      if (msg == selfMsg) {
-        double currentSimTime = simTime().dbl();// Convert to milliseconds
+        double currentSimTime = simTime().dbl();
         int remainingChannels = NrOfChannels;
 
         // Create priority-ordered vector of users

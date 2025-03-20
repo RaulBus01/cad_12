@@ -7,12 +7,15 @@ using namespace omnetpp;
 
 void GeneratorFLC::initialize()
 {  
-	flc_time = 1;
+	flc_time = 1; // will be set by the FLC
+    // flc_time = 0;
 
 
 	//(simtime_t)getParentModule()->par("flc_time");;
     sendMessageEvent = new cMessage("sendMessageEvent");
-    scheduleAt(0, sendMessageEvent);
+
+    scheduleAt(0, sendMessageEvent); // send the first message
+
 }
    
 
