@@ -564,64 +564,62 @@ void FLC::handleMessage(cMessage *msg)
 	if (!strcmp(msg->getName(),"start_flc"))
 	{
 
-	    ev << "Calculez nou HP" << endl;
-	    double wantedDelay = 1;//(int)getParentModule()->par("delayLimit"); // in seconds
-	    double currentDelay = getParentModule()->getSubmodule("sink")->par("meanHPDelay").doubleValue();
-	    int W_HP = (int)getParentModule()->getSubmodule("scheduler")->par("W_HP");
-	    int B =20;//(int)getParentModule()->getSubmodule("netwrk")->par("B");
+        double wantedDelay = 0.8;//(int)getParentModule()->par("delayLimit"); // in seconds
+        double currentDelay = getParentModule()->getSubmodule("sink")->par("meanHPDelay").doubleValue();
+        int W_HP = (int)getParentModule()->getSubmodule("scheduler")->par("W_HP");
+        int B = 20;//(int)getParentModule()->getSubmodule("netwrk")->par("B");
         int maxWeight = -1;
-	    int new_W_HP = W_HP;
-		int diff = wantedDelay - currentDelay;
+        int new_W_HP = W_HP;
+    	double diff = wantedDelay - currentDelay;
 
-		qtime.record (currentDelay);
-		ev<<" Dif nescalat = "<<diff<<"\n";
+        qtime.record (currentDelay);
+        ev<<" Dif nescalat = "<<diff<<"\n";
 
-		diff = scale(0, 62, -10, 10, diff);
-		W_HP = scale(0, 62, 0, B, W_HP);
-		ev<<" Dif scalat = "<<diff<<"\n";
-		ev<<" W_HP scalat = "<<W_HP<<"\n";
-			
-		int delta = 4;//(int) getParentModule()->par("delta");
-		int inp[2]={diff,W_HP};
-		
-		int result = fuzzy_inference(inp,2, delta);
-		result_dep.record (result);
+        int scaled_diff = scale(0, 62, -3, 3, diff); // Modified scaling range
+     
+        ev<<" Dif scalat = "<<scaled_diff<<"\n";
+    
+            
+        int delta = 4;//(int) getParentModule()->par("delta");
+        int inp[1]={scaled_diff};
+        
+        int result = fuzzy_inference(inp,1, delta);
+        result_dep.record (result);
 
-		int res = round(scale((B * -1)/2, B/2, 0, 62, result));
-		ev<<" Result raw = "<<result<<"\nResult scaled= "<<res<<"\n";
+        int res = round(scale((B * -1)/2, B/2, 0, 62, result));
+        ev<<" Result raw = "<<result<<"\nResult scaled= "<<res<<"\n";
 
-		res_dep.record (res);
+        res_dep.record (res);
 
-		new_W_HP = new_W_HP + res;
-	    if(new_W_HP > maxWeight) maxWeight = new_W_HP;
+        new_W_HP = new_W_HP + res;
+        if(new_W_HP > maxWeight) maxWeight = new_W_HP;
 
-		ev << "New Weight For HP User" << new_W_HP << "\n\n";
+        ev << "New Weight For HP User" << new_W_HP << "\n\n";
    
-		if (new_W_HP>B) new_W_HP = B-1;
-		if (new_W_HP<1) new_W_HP = 1;
+        if (new_W_HP>B) new_W_HP = B-1;
+        if (new_W_HP<1) new_W_HP = 1;
 
 /* not for test
 
 */		cPar& W_HP_r = getParentModule()->getSubmodule("scheduler")->par("W_HP");
-		W_HP_r.setIntValue(new_W_HP);
-		ev<<"New Weight For HP User "<<new_W_HP<<"\n\n";
-		cMessage *weightUpdate = new cMessage("weightUpdate");
-		weightUpdate->addPar("newHPWeight");
-		weightUpdate->par("newHPWeight").setLongValue(new_W_HP);
-		sendDirect(weightUpdate, getParentModule()->getSubmodule("scheduler")->gate("inFLC"));
+        W_HP_r.setIntValue(new_W_HP);
+        ev<<"New Weight For HP User "<<new_W_HP<<"\n\n";
+        cMessage *weightUpdate = new cMessage("weightUpdate");
+        weightUpdate->addPar("newHPWeight");
+        weightUpdate->par("newHPWeight").setLongValue(new_W_HP);
+        sendDirect(weightUpdate, getParentModule()->getSubmodule("scheduler")->gate("inFLC"));
 
-		qtimew.record(new_W_HP);
+        qtimew.record(new_W_HP);
 
-		ev << "Target Delay: " << wantedDelay 
+        ev << "Target Delay: " << wantedDelay 
    << " | Current Delay: " << currentDelay 
    << " | Diff: " << wantedDelay - currentDelay
-   << " | Old Weight: " << W_HP 
    << " | Max Weight: " << maxWeight
    << " | New Weight: " << new_W_HP << endl;
-		//cMessage *job = new cMessage("clear");
-		//sendDirect(job, getParentModule()->getSubmodule("netwrk")->gate("in"));
-		delete msg;
-	}
+        //cMessage *job = new cMessage("clear");
+        //sendDirect(job, getParentModule()->getSubmodule("netwrk")->gate("in"));
+        delete msg;
+    }
 }
 
 

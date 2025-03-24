@@ -14,7 +14,7 @@ void GeneratorFLC::initialize()
 	//(simtime_t)getParentModule()->par("flc_time");;
     sendMessageEvent = new cMessage("sendMessageEvent");
 
-    scheduleAt(0, sendMessageEvent); // send the first message
+   scheduleAt(0, sendMessageEvent); // send the first message
 
 }
    
